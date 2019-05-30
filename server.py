@@ -143,12 +143,10 @@ class Routing:
 
     def handle_request(self, request):
         response = self.good_response()
-
-        for path, handler in self.routes.items():
-            if path == request:
-                return handler(request, response)
-            else:
-                return self.default_response(response)
+        if request in self.routes.keys():
+            return self.routes[request](request, response)
+        else:
+            return self.default_response(response)
 
     def add_new_route(self, path, handler):
         if path not in self.routes:
