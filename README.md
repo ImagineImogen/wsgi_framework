@@ -1,4 +1,4 @@
-## WSGI_framework and the web server
+## WSGI framework and the web server
 
 ###### *A simple webserver runnning on port 8888 with the framework where routing was implemented.*
 
