@@ -119,49 +119,14 @@ class WSGIServer(object):
 SERVER_ADDRESS = (HOST, PORT) = '', 8888
 
 
+
 def make_server(server_address, application):
     server = WSGIServer(server_address)
     server.set_app(application)
     return server
 
 
-class Routing:
-    def __init__(self):
-        self.routes = {}
 
-    def __call__(self, env, start_response):
-
-        status = '200 OK'
-        response_headers = [('Content-Typeimport app', 'text/plain')]
-        path = env.get('PATH_INFO')
-        response = self.handle_request(path)
-
-
-        start_response(status, response_headers)
-
-        return response
-
-    def handle_request(self, request):
-        response = self.good_response()
-        if request in self.routes.keys():
-            return self.routes[request](request, response)
-        else:
-            return self.default_response(response)
-
-    def add_new_route(self, path, handler):
-        if path not in self.routes:
-            self.routes[path] = handler
-
-
-    def default_response(self, response):
-        status_code = 404
-        text = "Not found."
-        return iter([text])
-
-    def good_response(self):
-        status = '200 OK'
-        response_headers = [('Content-Typeimport app', 'text/plain')]
-        return status, response_headers
 
 
 if __name__ == '__main__':
@@ -171,6 +136,15 @@ if __name__ == '__main__':
     module, application = app_path.split(':')
     module = __import__(module)
     application = getattr(module, application)
-    httpd = make_server(SERVER_ADDRESS, application)
+    user_path = input("Please provide a host and port address separated by : ")
+
+    try:
+        u = user_path.split(':')
+        USER_SERVER_ADDRESS = u[0], int(u[1])
+        httpd = make_server(USER_SERVER_ADDRESS, application)
+        PORT = u[1]
+    except (OSError, OverflowError, ValueError,IndexError) :
+        httpd = make_server(SERVER_ADDRESS, application)
+        print("The data you entered are not valid\nStarting the server with the default configurations")
     print('WSGIServer: Serving HTTP on port {port} ...\n'.format(port=PORT))
     httpd.serve_forever()
