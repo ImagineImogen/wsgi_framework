@@ -96,6 +96,7 @@ class WSGIServer(object):
         ]
         self.headers_set = [status, response_headers + server_headers]
 
+
     def finish_response(self, result):
         try:
             status, response_headers = self.headers_set
@@ -105,7 +106,8 @@ class WSGIServer(object):
             response += '\r\n'
 
             for data in result:
-                response += data
+                response += list(data)[0]
+
             #Print formatted response data a la 'curl -v'
             print(''.join(
                 '> {line}\n'.format(line=line)
