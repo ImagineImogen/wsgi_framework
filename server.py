@@ -3,6 +3,7 @@ import sys
 
 
 
+
 class WSGIServer(object):
 
     address_family = socket.AF_INET
@@ -106,7 +107,8 @@ class WSGIServer(object):
             response += '\r\n'
 
             for data in result:
-                response += list(data)[0]
+                response += data['text']
+
 
             #Print formatted response data a la 'curl -v'
             print(''.join(
